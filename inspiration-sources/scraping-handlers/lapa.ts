@@ -34,7 +34,7 @@ const handler: InspirationSource["handler"] = async (
       );
     }
 
-    writeToConsole(`| Scraping from ${InspirationSourceName.Lapa} |`);
+    writeToConsole(`Scraping from ${InspirationSourceName.Lapa}`);
 
     const websites: ScrapedWebsiteInfo[] = [];
 
@@ -63,7 +63,8 @@ const handler: InspirationSource["handler"] = async (
       const websiteExistsInDB = await checkWebsiteInDB(scrapedWebsiteInfo);
       if (websiteExistsInDB) {
         writeToConsole(
-          `"${scrapedWebsiteInfo.title}" website is already in DB`
+          `"${scrapedWebsiteInfo.title}" website is already in DB`,
+          1
         );
 
         return;
@@ -73,7 +74,7 @@ const handler: InspirationSource["handler"] = async (
       websites.push(scrapedWebsiteInfo);
     });
 
-    writeToConsole(`| Finished scraping from ${InspirationSourceName.Lapa} |`);
+    writeToConsole(`Finished scraping from ${InspirationSourceName.Lapa}`);
 
     return websites;
   } catch (error) {

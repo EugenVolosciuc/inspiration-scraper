@@ -35,7 +35,7 @@ const handler: InspirationSource["handler"] = async (
     }
 
     writeToConsole(
-      `| Scraping from ${InspirationSourceName.WebDesignInspiration} |`
+      `Scraping from ${InspirationSourceName.WebDesignInspiration}`
     );
 
     const websites: ScrapedWebsiteInfo[] = [];
@@ -65,7 +65,8 @@ const handler: InspirationSource["handler"] = async (
       const websiteExistsInDB = await checkWebsiteInDB(scrapedWebsiteInfo);
       if (websiteExistsInDB) {
         writeToConsole(
-          `"${scrapedWebsiteInfo.title}" website is already in DB`
+          `"${scrapedWebsiteInfo.title}" website is already in DB`,
+          1
         );
       }
 
@@ -74,7 +75,7 @@ const handler: InspirationSource["handler"] = async (
     });
 
     writeToConsole(
-      `| Finished scraping from ${InspirationSourceName.WebDesignInspiration} |`
+      `Finished scraping from ${InspirationSourceName.WebDesignInspiration}`
     );
 
     return websites;

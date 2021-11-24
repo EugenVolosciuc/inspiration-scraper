@@ -34,9 +34,7 @@ const handler: InspirationSource["handler"] = async (
       );
     }
 
-    writeToConsole(
-      `| Scraping from ${InspirationSourceName.BestWebsiteGallery} |`
-    );
+    writeToConsole(`Scraping from ${InspirationSourceName.BestWebsiteGallery}`);
 
     const websites: ScrapedWebsiteInfo[] = [];
 
@@ -72,7 +70,8 @@ const handler: InspirationSource["handler"] = async (
       const websiteExistsInDB = await checkWebsiteInDB(scrapedWebsiteInfo);
       if (websiteExistsInDB) {
         writeToConsole(
-          `"${scrapedWebsiteInfo.title}" website is already in DB`
+          `"${scrapedWebsiteInfo.title}" website is already in DB`,
+          1
         );
 
         return;
@@ -83,7 +82,7 @@ const handler: InspirationSource["handler"] = async (
     });
 
     writeToConsole(
-      `| Finished scraping from ${InspirationSourceName.BestWebsiteGallery} |`
+      `Finished scraping from ${InspirationSourceName.BestWebsiteGallery}`
     );
 
     return websites;

@@ -8,7 +8,7 @@ import { Website } from "../db/entities/Website";
 import { ScrapedWebsiteInfo } from "../types/InspirationSource";
 import writeToConsole from "./writeToConsole";
 
-const articleTitleBase = "Web Design Inspiration";
+const articleTitleBase = "Web Design Inspiration for";
 
 const getPartOfMonth = () => {
   const articlesPerMonth = parseInt(
@@ -45,7 +45,7 @@ export const takeHeroAreaScreenshot = async (page: Page, fileTitle: string) => {
   const screenshot = await page.screenshot({
     path: `./assets/screenshots/${fileTitle}.png`,
   });
-  writeToConsole(`Took screenshot of ${fileTitle}`);
+  writeToConsole(`Took screenshot of ${fileTitle}`, 1);
 
   return screenshot;
 };
@@ -66,7 +66,7 @@ export const saveWebsiteToDB = async (
   const websiteInstance = websiteRepository.create(scrapedWebsiteInfo);
   const website = await websiteRepository.save(websiteInstance);
 
-  writeToConsole(`Added ${website.title} website to DB`);
+  writeToConsole(`Added ${website.title} website to DB`, 1);
 
   return website;
 };
