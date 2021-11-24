@@ -14,36 +14,48 @@ import {
   ScrapedWebsiteInfo,
 } from "../../types/InspirationSource";
 
-const maxNumberOfEntries = 2;
+const maxNumberOfEntries = 4;
 
-/** This function fetches the information of websites from the lapa.ninja homepage */
+/** This function fetches the information of "latest winners" websites from the bestwebsite.gallery homepage */
 const handler = async (page: Page, numberOfEntries: number = 1) => {
-  const { url } = inspirationSources.Lapa;
+  const { url } = inspirationSources.BestWebsiteGallery;
 
   const getWebsiteTileSelector = (num: number) =>
-    `.body .container .columns .column:nth-of-type(${num})`;
+    `.c-section:not(.c-section--sotd) .c-sites .c-sites__item:nth-of-type(${num}) .c-sites__itemInner`;
 
   try {
     if (numberOfEntries > maxNumberOfEntries) {
       throw new Error(
-        `Can't fetch more than ${maxNumberOfEntries} websites from ${InspirationSourceName.Lapa}`
+        `Can't fetch more than ${maxNumberOfEntries} websites from ${InspirationSourceName.BestWebsiteGallery}`
       );
     }
 
-    writeToConsole(`| Scraping from ${InspirationSourceName.Lapa} |`);
+    writeToConsole(
+      `| Scraping from ${InspirationSourceName.BestWebsiteGallery} |`
+    );
 
     // Go through each website `numberOfEntries` times
     await loopTimes(numberOfEntries, async (currentNumber) => {
-      // Go to lapa home page after every entry
+      // Go to BestWebsiteGallery home page after every entry
       await page.goto(url);
 
+      const websiteTileSelector = getWebsiteTileSelector(currentNumber);
+
+      console.log("page url", page.url());
+
+      // Hover over the image to get the website link
+      await page.hover(
+        getWebsiteTileSelector(currentNumber) + " .c-sites__figureWrapper"
+      );
+      // await page.waitForTimeout(500)
+
       const websiteTileInfo = await page.$eval(
-        getWebsiteTileSelector(currentNumber),
+        websiteTileSelector,
         (element) => ({
-          title: element.querySelector(".card-header .card-title a")
+          title: element.querySelector(".c-sites__title a")
             ?.textContent as string,
           url: element
-            .querySelector(".card-header > a")
+            .querySelector(".c-quickLinks > a:nth-of-type(2)")
             ?.getAttribute("href") as string,
         })
       );
@@ -51,7 +63,7 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
       const scrapedWebsiteInfo: ScrapedWebsiteInfo = {
         title: normalizeWebsiteTitle(websiteTileInfo.title) as string,
         url: websiteTileInfo.url,
-        source: InspirationSourceName.Lapa,
+        source: InspirationSourceName.BestWebsiteGallery,
       };
 
       const websiteExistsInDB = await checkWebsiteInDB(scrapedWebsiteInfo);
@@ -66,9 +78,11 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
       await processScrapedWebsiteInfo(page, scrapedWebsiteInfo);
     });
 
-    writeToConsole(`| Finished scraping from ${InspirationSourceName.Lapa} |`);
+    writeToConsole(
+      `| Finished scraping from ${InspirationSourceName.BestWebsiteGallery} |`
+    );
   } catch (error) {
-    errorHandler(error, InspirationSourceName.Lapa);
+    errorHandler(error, InspirationSourceName.BestWebsiteGallery);
   }
 };
 

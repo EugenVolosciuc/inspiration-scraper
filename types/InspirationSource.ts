@@ -8,6 +8,7 @@ interface WebsiteInfoBase {
 export enum InspirationSourceName {
   Awwwards = "Awwwards",
   Lapa = "Lapa",
+  BestWebsiteGallery = "BestWebsiteGallery",
 }
 
 export const inspirationSourceNames: InspirationSourceName[] = Object.values(

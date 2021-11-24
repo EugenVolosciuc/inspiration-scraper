@@ -4,17 +4,21 @@
   "description": "Web design inspiration generator",
   "main": "app.ts",
   "scripts": {
-    "start": "nodemon app.ts"
+    "start": "ts-node app.ts",
+    "dev": "nodemon app.ts",
+    "remove-websites": "ts-node ./standalone-scripts/remove-websites.ts"
   },
   "author": "Eugen Volosciuc",
   "license": "ISC",
   "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
     "nodemon": "^2.0.15",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
+    "fs-extra": "^10.0.0",
     "pg": "^8.7.1",
     "puppeteer": "^11.0.0",
     "typeorm": "^0.2.41"

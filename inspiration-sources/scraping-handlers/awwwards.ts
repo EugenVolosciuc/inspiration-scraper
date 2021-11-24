@@ -4,11 +4,10 @@ import inspirationSources from "../list";
 import errorHandler from "../../utils/errorHandler";
 import loopTimes from "../../utils/loopTimes";
 import writeToConsole from "../../utils/writeToConsole";
+import normalizeWebsiteTitle from "../../utils/normalize-website-title";
 import {
   checkWebsiteInDB,
   processScrapedWebsiteInfo,
-  saveWebsiteToDB,
-  takeHeroAreaScreenshot,
 } from "../../utils/website";
 import {
   InspirationSourceName,
@@ -83,7 +82,7 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
       const visitWebsiteBtnHref = await getVisitWebsiteBtnHref(page);
 
       const scrapedWebsiteInfo: ScrapedWebsiteInfo = {
-        title: websiteTileInfo.title,
+        title: normalizeWebsiteTitle(websiteTileInfo.title) as string,
         url: visitWebsiteBtnHref,
         source: InspirationSourceName.Awwwards,
       };

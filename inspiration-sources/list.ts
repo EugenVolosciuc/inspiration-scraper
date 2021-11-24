@@ -2,7 +2,7 @@ import {
   InspirationSource,
   InspirationSourceName,
 } from "../types/InspirationSource";
-import { awwwards, lapa } from "./scraping-handlers";
+import { awwwards, bestwebsitegallery, lapa } from "./scraping-handlers";
 
 const inspirationSources: {
   [key in InspirationSourceName]: InspirationSource;
@@ -11,13 +11,19 @@ const inspirationSources: {
     title: "Awwwards",
     url: "https://www.awwwards.com/",
     handler: awwwards,
-    numberOfEntries: 4,
+    numberOfEntries: 2,
   },
   Lapa: {
     title: "Lapa",
     url: "https://www.lapa.ninja/",
     handler: lapa,
     numberOfEntries: 2,
+  },
+  BestWebsiteGallery: {
+    title: "Best Website Gallery",
+    url: "https://bestwebsite.gallery/",
+    handler: bestwebsitegallery,
+    numberOfEntries: 3,
   },
 };
 
