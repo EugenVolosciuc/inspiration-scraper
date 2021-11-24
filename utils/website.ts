@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs-extra";
 
 import { Website } from "../db/entities/Website";
-import { ScrapedWebsiteInfo } from "../types/InspirationSource";
+import { ScrapedWebsiteInfo, WebsiteInfo } from "../types/InspirationSource";
 import writeToConsole from "./writeToConsole";
 import {
   createBlankArticle,
@@ -15,6 +15,8 @@ import {
   generateContentSummary,
   generatePeriodDescription,
   generateWebsiteEntries,
+  generateEndingContent,
+  getColorSchemeFromImage,
 } from "./article";
 import { titleToFileName } from "./string-manipulations";
 
@@ -52,17 +54,25 @@ export const saveWebsiteToDB = async (
 export const processScrapedWebsiteInfo = async (
   page: Page,
   scrapedWebsiteInfo: ScrapedWebsiteInfo
-) => {
+): Promise<WebsiteInfo> => {
   await saveWebsiteToDB(scrapedWebsiteInfo);
   await page.goto(scrapedWebsiteInfo.url, {
     waitUntil: "domcontentloaded",
   });
   await page.waitForTimeout(8000); // Page might have animations, wait for a little bit
-  await takeHeroAreaScreenshot(page, scrapedWebsiteInfo.title);
-  // TODO: generate color scheme
+  const screenshot = await takeHeroAreaScreenshot(
+    page,
+    scrapedWebsiteInfo.title
+  );
+  const colors = await getColorSchemeFromImage(screenshot);
+
+  return {
+    ...scrapedWebsiteInfo,
+    colors,
+  };
 };
 
-export const generateArticle = async (websites: ScrapedWebsiteInfo[]) => {
+export const generateArticle = async (websites: WebsiteInfo[]) => {
   try {
     writeToConsole("Generating article");
     const fileTitle = await createBlankArticle();
@@ -85,6 +95,9 @@ export const generateArticle = async (websites: ScrapedWebsiteInfo[]) => {
 
     // Append websites
     await fs.appendFile(filePath, generateWebsiteEntries(websites));
+
+    // Append ending content
+    await fs.appendFile(filePath, generateEndingContent());
   } catch (error) {
     writeToConsole("Failed to generate article");
     console.log(error);

@@ -3,10 +3,7 @@ import puppeteer from "puppeteer";
 import connect from "./db/connect";
 
 import inspirationSources from "./inspiration-sources/list";
-import {
-  InspirationSourceName,
-  ScrapedWebsiteInfo,
-} from "./types/InspirationSource";
+import { InspirationSourceName, WebsiteInfo } from "./types/InspirationSource";
 import { generateArticle } from "./utils/website";
 import writeToConsole from "./utils/writeToConsole";
 
@@ -17,7 +14,7 @@ const initiateApp = async () => {
   const page = await browser.newPage();
   page.setViewport({ width: 1920, height: 1080 });
 
-  let websites: ScrapedWebsiteInfo[] = [];
+  let websites: WebsiteInfo[] = [];
 
   // Fire each inspiration websites's handler
   for (let inspirationSourceTitle in inspirationSources) {

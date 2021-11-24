@@ -13,6 +13,7 @@ import {
   InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
+  WebsiteInfo,
 } from "../../types/InspirationSource";
 
 const maxNumberOfEntries = 12;
@@ -38,7 +39,7 @@ const handler: InspirationSource["handler"] = async (
       `Scraping from ${InspirationSourceName.WebDesignInspiration}`
     );
 
-    const websites: ScrapedWebsiteInfo[] = [];
+    const websites: WebsiteInfo[] = [];
 
     // Go through each website `numberOfEntries` times
     await loopTimes(numberOfEntries, async (currentNumber) => {
@@ -70,8 +71,11 @@ const handler: InspirationSource["handler"] = async (
         );
       }
 
-      await processScrapedWebsiteInfo(page, scrapedWebsiteInfo);
-      websites.push(scrapedWebsiteInfo);
+      const websiteInfo = await processScrapedWebsiteInfo(
+        page,
+        scrapedWebsiteInfo
+      );
+      websites.push(websiteInfo);
     });
 
     writeToConsole(
