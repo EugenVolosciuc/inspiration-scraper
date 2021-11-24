@@ -7,7 +7,8 @@
     "start": "ts-node app.ts",
     "dev": "nodemon app.ts",
     "remove-websites": "ts-node ./standalone-scripts/remove-websites.ts",
-    "remove-articles": "ts-node ./standalone-scripts/remove-articles.ts"
+    "remove-articles": "ts-node ./standalone-scripts/remove-articles.ts",
+    "remove-all": "npm run remove-websites && npm run remove-articles"
   },
   "author": "Eugen Volosciuc",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
     "fs-extra": "^10.0.0",
+    "lorem-ipsum": "^2.0.4",
     "pg": "^8.7.1",
     "puppeteer": "^11.0.0",
     "typeorm": "^0.2.41"

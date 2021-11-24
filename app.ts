@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import puppeteer from "puppeteer";
 import connect from "./db/connect";
 
@@ -12,6 +13,7 @@ import writeToConsole from "./utils/writeToConsole";
 require("dotenv").config();
 
 const initiateApp = async () => {
+  const startTime = dayjs();
   const connection = await connect();
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -34,7 +36,8 @@ const initiateApp = async () => {
 
   await generateArticle(websites);
 
-  writeToConsole("All done");
+  const secondsPassed = dayjs().diff(startTime, "seconds");
+  writeToConsole(`Generated article in ${secondsPassed}s`);
   await connection.close();
   process.exit(0);
 };

@@ -1,47 +1,23 @@
 import { Page } from "puppeteer";
 import { getRepository } from "typeorm";
-import fs from "fs-extra";
-import dayjs from "dayjs";
 import path from "path";
+import fs from "fs-extra";
 
 import { Website } from "../db/entities/Website";
 import { ScrapedWebsiteInfo } from "../types/InspirationSource";
 import writeToConsole from "./writeToConsole";
-
-const articleTitleBase = "Web Design Inspiration for";
-
-const getPartOfMonth = () => {
-  const articlesPerMonth = parseInt(
-    process.env.ARTICLES_PER_MONTH as string,
-    10
-  );
-  const now = dayjs();
-  const daysInMonth = now.daysInMonth();
-  const currentDate = now.date();
-
-  return Math.ceil(currentDate / Math.floor(daysInMonth / articlesPerMonth));
-};
-
-const createBlankArticle = async () => {
-  const partOfMonth = getPartOfMonth();
-  const fileTitle = `${articleTitleBase} ${dayjs().format(
-    "MMMM YYYY"
-  )} - Part ${partOfMonth}`;
-
-  const articlePath = path.join(
-    __dirname,
-    "..",
-    "assets",
-    "articles",
-    `${fileTitle}.md`
-  );
-
-  await fs.writeFile(articlePath, "", {
-    flag: "w+",
-  });
-};
+import {
+  createBlankArticle,
+  articlesFolderPath,
+  generateContentTitle,
+  articleExtension,
+  generateBlogIntro,
+  generateContentSummary,
+  generatePeriodDescription,
+} from "./article";
 
 export const takeHeroAreaScreenshot = async (page: Page, fileTitle: string) => {
+  // TODO: create folder for article image
   const screenshot = await page.screenshot({
     path: `./assets/screenshots/${fileTitle}.png`,
   });
@@ -87,7 +63,23 @@ export const processScrapedWebsiteInfo = async (
 export const generateArticle = async (websites: ScrapedWebsiteInfo[]) => {
   try {
     writeToConsole("Generating article");
-    await createBlankArticle();
+    const fileTitle = await createBlankArticle();
+    const filePath = path.join(
+      articlesFolderPath,
+      `${fileTitle}${articleExtension}`
+    );
+
+    // Append article title
+    await fs.appendFile(filePath, generateContentTitle(fileTitle));
+
+    // Append article intro
+    await fs.appendFile(filePath, generateBlogIntro());
+
+    // Append article summary
+    await fs.appendFile(filePath, generateContentSummary(websites));
+
+    // Append period description
+    await fs.appendFile(filePath, generatePeriodDescription());
   } catch (error) {
     writeToConsole("Failed to generate article");
     console.log(error);
