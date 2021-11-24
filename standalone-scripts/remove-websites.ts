@@ -11,9 +11,9 @@ const main = async () => {
   const connection = await connect();
   const websiteRepository = getRepository(Website);
 
-  // Remove assets from assets folder
-  await fs.emptyDir("assets");
-  writeToConsole("Removed all files from assets folder");
+  // Remove screenshots from assets folder
+  await fs.emptyDir("assets/screenshots");
+  writeToConsole("Removed all screenshots from assets/screenshots folder");
 
   // Delete websites from DB
   await websiteRepository.clear();

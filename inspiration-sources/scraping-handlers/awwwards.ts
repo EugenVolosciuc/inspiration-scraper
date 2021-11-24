@@ -10,6 +10,7 @@ import {
   processScrapedWebsiteInfo,
 } from "../../utils/website";
 import {
+  InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
 } from "../../types/InspirationSource";
@@ -48,7 +49,10 @@ const getVisitWebsiteBtnHref = async (page: Page) => {
 };
 
 /** This function fetches the information of "Site of the day" websites from awwwards.com */
-const handler = async (page: Page, numberOfEntries: number = 1) => {
+const handler: InspirationSource["handler"] = async (
+  page: Page,
+  numberOfEntries: number = 1
+) => {
   const { url } = inspirationSources.Awwwards;
 
   const getWebsiteTileSelector = (num: number) =>
@@ -62,6 +66,8 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
     }
 
     writeToConsole(`| Scraping from ${InspirationSourceName.Awwwards} |`);
+
+    const websites: ScrapedWebsiteInfo[] = [];
 
     // Go through each website `numberOfEntries` times
     await loopTimes(numberOfEntries, async (currentNumber) => {
@@ -97,13 +103,18 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
       }
 
       await processScrapedWebsiteInfo(page, scrapedWebsiteInfo);
+      websites.push(scrapedWebsiteInfo);
     });
 
     writeToConsole(
       `| Finished scraping from ${InspirationSourceName.Awwwards} |`
     );
+
+    return websites;
   } catch (error) {
     errorHandler(error, InspirationSourceName.Awwwards);
+
+    return [];
   }
 };
 

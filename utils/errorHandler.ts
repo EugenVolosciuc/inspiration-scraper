@@ -6,7 +6,7 @@ const errorHandler = (error: unknown, websiteTitle: string) => {
 
   // Could not scrape website
   // TODO: Send message (sms or email) that this handler failed
-  // TODO: Fire another website's handler to get an entry
+  // TODO: Fire another website's handler to get an entry (not sure about this one)
 };
 
 export default errorHandler;

@@ -21,6 +21,9 @@ export interface ScrapedWebsiteInfo extends WebsiteInfoBase {
 }
 
 export interface InspirationSource extends WebsiteInfoBase {
-  handler: (page: Page, numberOfEntries?: number) => Promise<void>;
+  handler: (
+    page: Page,
+    numberOfEntries?: number
+  ) => Promise<ScrapedWebsiteInfo[]>;
   numberOfEntries?: number;
 }

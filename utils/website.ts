@@ -1,14 +1,49 @@
 import { Page } from "puppeteer";
 import { getRepository } from "typeorm";
+import fs from "fs-extra";
+import dayjs from "dayjs";
+import path from "path";
 
 import { Website } from "../db/entities/Website";
 import { ScrapedWebsiteInfo } from "../types/InspirationSource";
 import writeToConsole from "./writeToConsole";
 
+const articleTitleBase = "Web Design Inspiration";
+
+const getPartOfMonth = () => {
+  const articlesPerMonth = parseInt(
+    process.env.ARTICLES_PER_MONTH as string,
+    10
+  );
+  const now = dayjs();
+  const daysInMonth = now.daysInMonth();
+  const currentDate = now.date();
+
+  return Math.ceil(currentDate / Math.floor(daysInMonth / articlesPerMonth));
+};
+
+const createBlankArticle = async () => {
+  const partOfMonth = getPartOfMonth();
+  const fileTitle = `${articleTitleBase} ${dayjs().format(
+    "MMMM YYYY"
+  )} - Part ${partOfMonth}`;
+
+  const articlePath = path.join(
+    __dirname,
+    "..",
+    "assets",
+    "articles",
+    `${fileTitle}.md`
+  );
+
+  await fs.writeFile(articlePath, "", {
+    flag: "w+",
+  });
+};
+
 export const takeHeroAreaScreenshot = async (page: Page, fileTitle: string) => {
-  // NOTE: when image will be saved to remote storage, remove the path key below
   const screenshot = await page.screenshot({
-    path: `./assets/${fileTitle}.png`,
+    path: `./assets/screenshots/${fileTitle}.png`,
   });
   writeToConsole(`Took screenshot of ${fileTitle}`);
 
@@ -45,9 +80,16 @@ export const processScrapedWebsiteInfo = async (
     waitUntil: "domcontentloaded",
   });
   await page.waitForTimeout(8000); // Page might have animations, wait for a little bit
-  const screenshot = await takeHeroAreaScreenshot(
-    page,
-    scrapedWebsiteInfo.title
-  );
+  await takeHeroAreaScreenshot(page, scrapedWebsiteInfo.title);
   // TODO: generate color scheme
+};
+
+export const generateArticle = async (websites: ScrapedWebsiteInfo[]) => {
+  try {
+    writeToConsole("Generating article");
+    await createBlankArticle();
+  } catch (error) {
+    writeToConsole("Failed to generate article");
+    console.log(error);
+  }
 };

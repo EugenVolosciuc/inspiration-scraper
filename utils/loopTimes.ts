@@ -1,6 +1,6 @@
 const loopTimes = async (
   num: number,
-  callback: (currentNumber: number) => Promise<void>
+  callback: (currentNumber: number) => Promise<any>
 ) => {
   while (num) {
     await callback(num);

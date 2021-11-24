@@ -28,13 +28,13 @@ const inspirationSources: {
     title: "Best Website Gallery",
     url: "https://bestwebsite.gallery/",
     handler: bestwebsitegallery,
-    numberOfEntries: 2,
+    numberOfEntries: 0,
   },
   WebDesignInspiration: {
     title: "Web Design Inspiration",
     url: "https://www.webdesign-inspiration.com/",
     handler: webdesigninspiration,
-    numberOfEntries: 3,
+    numberOfEntries: 0,
   },
 };
 

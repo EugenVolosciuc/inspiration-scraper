@@ -10,6 +10,7 @@ import {
   processScrapedWebsiteInfo,
 } from "../../utils/website";
 import {
+  InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
 } from "../../types/InspirationSource";
@@ -17,7 +18,10 @@ import {
 const maxNumberOfEntries = 12;
 
 /** This function fetches the information of "latest web design" websites from the webdesign-inspiration.com homepage */
-const handler = async (page: Page, numberOfEntries: number = 1) => {
+const handler: InspirationSource["handler"] = async (
+  page: Page,
+  numberOfEntries: number = 1
+) => {
   const { url } = inspirationSources.WebDesignInspiration;
 
   const getWebsiteTileSelector = (num: number) =>
@@ -33,6 +37,8 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
     writeToConsole(
       `| Scraping from ${InspirationSourceName.WebDesignInspiration} |`
     );
+
+    const websites: ScrapedWebsiteInfo[] = [];
 
     // Go through each website `numberOfEntries` times
     await loopTimes(numberOfEntries, async (currentNumber) => {
@@ -61,14 +67,21 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
         writeToConsole(
           `"${scrapedWebsiteInfo.title}" website is already in DB`
         );
-
-        return;
       }
 
       await processScrapedWebsiteInfo(page, scrapedWebsiteInfo);
+      websites.push(scrapedWebsiteInfo);
     });
+
+    writeToConsole(
+      `| Finished scraping from ${InspirationSourceName.WebDesignInspiration} |`
+    );
+
+    return websites;
   } catch (error) {
     errorHandler(error, InspirationSourceName.WebDesignInspiration);
+
+    return [];
   }
 };
 

@@ -10,6 +10,7 @@ import {
   processScrapedWebsiteInfo,
 } from "../../utils/website";
 import {
+  InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
 } from "../../types/InspirationSource";
@@ -17,7 +18,10 @@ import {
 const maxNumberOfEntries = 2;
 
 /** This function fetches the information of websites from the lapa.ninja homepage */
-const handler = async (page: Page, numberOfEntries: number = 1) => {
+const handler: InspirationSource["handler"] = async (
+  page: Page,
+  numberOfEntries: number = 1
+) => {
   const { url } = inspirationSources.Lapa;
 
   const getWebsiteTileSelector = (num: number) =>
@@ -31,6 +35,8 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
     }
 
     writeToConsole(`| Scraping from ${InspirationSourceName.Lapa} |`);
+
+    const websites: ScrapedWebsiteInfo[] = [];
 
     // Go through each website `numberOfEntries` times
     await loopTimes(numberOfEntries, async (currentNumber) => {
@@ -64,11 +70,16 @@ const handler = async (page: Page, numberOfEntries: number = 1) => {
       }
 
       await processScrapedWebsiteInfo(page, scrapedWebsiteInfo);
+      websites.push(scrapedWebsiteInfo);
     });
 
     writeToConsole(`| Finished scraping from ${InspirationSourceName.Lapa} |`);
+
+    return websites;
   } catch (error) {
     errorHandler(error, InspirationSourceName.Lapa);
+
+    return [];
   }
 };
 
