@@ -4,7 +4,7 @@ import inspirationSources from "../list";
 import errorHandler from "../../utils/errorHandler";
 import loopTimes from "../../utils/loopTimes";
 import writeToConsole from "../../utils/writeToConsole";
-import normalizeWebsiteTitle from "../../utils/normalize-website-title";
+import { normalizeWebsiteTitle } from "../../utils/string-manipulations";
 import {
   checkWebsiteInDB,
   processScrapedWebsiteInfo,
@@ -82,7 +82,8 @@ const handler: InspirationSource["handler"] = async (
     });
 
     writeToConsole(
-      `Finished scraping from ${InspirationSourceName.BestWebsiteGallery}`
+      `Finished scraping from ${InspirationSourceName.BestWebsiteGallery}`,
+      1
     );
 
     return websites;

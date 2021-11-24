@@ -10,8 +10,6 @@ import {
 import { generateArticle } from "./utils/website";
 import writeToConsole from "./utils/writeToConsole";
 
-require("dotenv").config();
-
 const initiateApp = async () => {
   const startTime = dayjs();
   const connection = await connect();

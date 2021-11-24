@@ -4,7 +4,7 @@ import inspirationSources from "../list";
 import errorHandler from "../../utils/errorHandler";
 import loopTimes from "../../utils/loopTimes";
 import writeToConsole from "../../utils/writeToConsole";
-import normalizeWebsiteTitle from "../../utils/normalize-website-title";
+import { normalizeWebsiteTitle } from "../../utils/string-manipulations";
 import {
   checkWebsiteInDB,
   processScrapedWebsiteInfo,
@@ -74,7 +74,7 @@ const handler: InspirationSource["handler"] = async (
       websites.push(scrapedWebsiteInfo);
     });
 
-    writeToConsole(`Finished scraping from ${InspirationSourceName.Lapa}`);
+    writeToConsole(`Finished scraping from ${InspirationSourceName.Lapa}`, 1);
 
     return websites;
   } catch (error) {

@@ -14,12 +14,14 @@ import {
   generateBlogIntro,
   generateContentSummary,
   generatePeriodDescription,
+  generateWebsiteEntries,
 } from "./article";
+import { titleToFileName } from "./string-manipulations";
 
 export const takeHeroAreaScreenshot = async (page: Page, fileTitle: string) => {
   // TODO: create folder for article image
   const screenshot = await page.screenshot({
-    path: `./assets/screenshots/${fileTitle}.png`,
+    path: `./assets/screenshots/${titleToFileName(fileTitle)}.png`,
   });
   writeToConsole(`Took screenshot of ${fileTitle}`, 1);
 
@@ -80,6 +82,9 @@ export const generateArticle = async (websites: ScrapedWebsiteInfo[]) => {
 
     // Append period description
     await fs.appendFile(filePath, generatePeriodDescription());
+
+    // Append websites
+    await fs.appendFile(filePath, generateWebsiteEntries(websites));
   } catch (error) {
     writeToConsole("Failed to generate article");
     console.log(error);

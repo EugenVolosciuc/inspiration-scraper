@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { loremIpsum } from "lorem-ipsum";
 
 import { ScrapedWebsiteInfo } from "../types/InspirationSource";
+import { titleToFileName } from "./string-manipulations";
 
 const articleTitleBase = "Web Design Inspiration for";
 
@@ -47,7 +48,7 @@ export const createBlankArticle = async () => {
 };
 
 export const generateContentTitle = (title: string) => {
-  return `## ${title}\n`;
+  return `# ${title}\n`;
 };
 
 export const generateBlogIntro = () => {
@@ -71,6 +72,8 @@ export const generateContentSummary = (websites: ScrapedWebsiteInfo[]) => {
     summary += `- [${website.title}](${website.url})\n`;
   }
 
+  summary += "\n\n";
+
   return summary;
 };
 
@@ -87,4 +90,25 @@ export const generatePeriodDescription = () => {
       units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
     }) + "\n\n"
   );
+};
+
+export const generateWebsiteEntry = (website: ScrapedWebsiteInfo) => {
+  const title = `## ${website.title}\n`;
+  const image = `![${website.title}](/assets/screenshots/${titleToFileName(
+    website.title
+  )}.png)\n`;
+
+  // TODO: add color pallete
+
+  return `${title}${image}\n`;
+};
+
+export const generateWebsiteEntries = (websites: ScrapedWebsiteInfo[]) => {
+  let content = "";
+
+  for (let website of websites) {
+    content += generateWebsiteEntry(website);
+  }
+
+  return content;
 };
