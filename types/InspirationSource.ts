@@ -9,6 +9,7 @@ export enum InspirationSourceName {
   Awwwards = "Awwwards",
   Lapa = "Lapa",
   BestWebsiteGallery = "BestWebsiteGallery",
+  WebDesignInspiration = "WebDesignInspiration",
 }
 
 export const inspirationSourceNames: InspirationSourceName[] = Object.values(
