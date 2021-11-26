@@ -56,15 +56,19 @@ export const processScrapedWebsiteInfo = async (
   scrapedWebsiteInfo: ScrapedWebsiteInfo
 ): Promise<WebsiteInfo> => {
   await saveWebsiteToDB(scrapedWebsiteInfo);
+
   await page.goto(scrapedWebsiteInfo.url, {
     waitUntil: "domcontentloaded",
   });
-  await page.waitForTimeout(8000); // Page might have animations, wait for a little bit
+  await page.waitForTimeout(10000); // Page might have animations, wait for a little bit
   const screenshot = await takeHeroAreaScreenshot(
     page,
     scrapedWebsiteInfo.title
   );
-  const colors = await getColorSchemeFromImage(screenshot);
+  const colors = await getColorSchemeFromImage(
+    screenshot,
+    parseInt(process.env.COLORS_IN_PALETTE as string, 10)
+  );
 
   return {
     ...scrapedWebsiteInfo,
@@ -94,7 +98,8 @@ export const generateArticle = async (websites: WebsiteInfo[]) => {
     await fs.appendFile(filePath, generatePeriodDescription());
 
     // Append websites
-    await fs.appendFile(filePath, generateWebsiteEntries(websites));
+    const websiteEntries = await generateWebsiteEntries(websites);
+    await fs.appendFile(filePath, websiteEntries);
 
     // Append ending content
     await fs.appendFile(filePath, generateEndingContent());
@@ -102,4 +107,10 @@ export const generateArticle = async (websites: WebsiteInfo[]) => {
     writeToConsole("Failed to generate article");
     console.log(error);
   }
+};
+
+export const scrollToBottomOfPage = async (page: Page) => {
+  await page.evaluate(() => {
+    window.scrollBy(0, document.body.scrollHeight);
+  });
 };

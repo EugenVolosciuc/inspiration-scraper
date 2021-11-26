@@ -7,6 +7,7 @@ import {
   bestwebsitegallery,
   lapa,
   webdesigninspiration,
+  thefwa,
 } from "./scraping-handlers";
 
 require("dotenv").config();
@@ -46,6 +47,12 @@ const inspirationSources: {
       process.env.WEBDESIGNINSPIRATION_NUM_OF_ENTRIES as string,
       10
     ),
+  },
+  TheFWA: {
+    title: "The FWA",
+    url: "https://thefwa.com/",
+    handler: thefwa,
+    numberOfEntries: parseInt(process.env.THEFWA_NUM_OF_ENTRIES as string, 10),
   },
 };
 

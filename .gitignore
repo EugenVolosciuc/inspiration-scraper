@@ -1,4 +1,4 @@
-.env
-assets/screenshots/*
-assets/articles/*
+assets/*/*
+!assets/fonts/*
 node_modules
+.env

@@ -2,6 +2,7 @@ import fs from "fs-extra";
 import path from "path";
 import dayjs from "dayjs";
 import { loremIpsum } from "lorem-ipsum";
+import { createCanvas } from "canvas";
 import colorName from "color-namer";
 // @ts-ignore
 import palette from "image-palette";
@@ -66,7 +67,6 @@ export const generateBlogIntro = () => {
       paragraphUpperBound: 7, // Max. number of sentences per paragarph.
       sentenceLowerBound: 5, // Min. number of words per sentence.
       sentenceUpperBound: 15, // Max. number of words per sentence.
-      suffix: "\n", // Line ending, defaults to "\n" or "\r\n" (win32)
       units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
     }) + "\n\n"
   );
@@ -92,33 +92,41 @@ export const generatePeriodDescription = () => {
       paragraphUpperBound: 7, // Max. number of sentences per paragarph.
       sentenceLowerBound: 5, // Min. number of words per sentence.
       sentenceUpperBound: 15, // Max. number of words per sentence.
-      suffix: "\n", // Line ending, defaults to "\n" or "\r\n" (win32)
       units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
     }) + "\n\n"
   );
 };
 
-export const generateWebsiteEntry = (website: WebsiteInfo) => {
-  const title = `## ${website.title}\n`;
-  const image = `![${website.title}](/assets/screenshots/${titleToFileName(
+export const generateWebsiteEntry = async (website: WebsiteInfo) => {
+  await generateColorSchemeImage(website.colors, website.title);
+
+  const title = `## [${website.title}](${website.url})\n\n\n`;
+  const screenshot = `![${website.title}](/assets/screenshots/${titleToFileName(
+    website.title
+  )}.png)\n\n`;
+  const colorPaletteImage = `![${
+    website.title
+  } color palette](/assets/color-palettes/${titleToFileName(
     website.title
   )}.png)\n`;
+  const entryDescription = loremIpsum({
+    count: 5, // Number of "words", "sentences", or "paragraphs"
+    format: "plain", // "plain" or "html"
+    paragraphLowerBound: 3, // Min. number of sentences per paragraph.
+    paragraphUpperBound: 6, // Max. number of sentences per paragarph.
+    sentenceLowerBound: 5, // Min. number of words per sentence.
+    sentenceUpperBound: 13, // Max. number of words per sentence.
+    units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
+  });
 
-  let colorPalette = "";
-
-  for (let color of website.colors) {
-    colorPalette += `**Color name:** ${color.name}\n **HEX:** ${color.hex}\n\n`;
-  }
-
-  // TODO: add color pallete image
-  return `${title}${image}\n${colorPalette}`;
+  return `${title}${screenshot}${colorPaletteImage}${entryDescription}\n\n`;
 };
 
-export const generateWebsiteEntries = (websites: WebsiteInfo[]) => {
+export const generateWebsiteEntries = async (websites: WebsiteInfo[]) => {
   let content = "";
 
   for (let website of websites) {
-    content += generateWebsiteEntry(website);
+    content += await generateWebsiteEntry(website);
   }
 
   return content;
@@ -134,7 +142,6 @@ export const generateEndingContent = () => {
       paragraphUpperBound: 7, // Max. number of sentences per paragarph.
       sentenceLowerBound: 5, // Min. number of words per sentence.
       sentenceUpperBound: 15, // Max. number of words per sentence.
-      suffix: "\n", // Line ending, defaults to "\n" or "\r\n" (win32)
       units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
     }) +
     "\n\n"
@@ -142,10 +149,14 @@ export const generateEndingContent = () => {
 };
 
 export const getColorSchemeFromImage = async (
-  image: string | Buffer
+  image: string | Buffer,
+  numberOfColors: number
 ): Promise<Color[]> => {
   const colors: Color[] = [];
-  const { colors: generatedColors } = palette(await pixels(image), 4);
+  const { colors: generatedColors } = palette(
+    await pixels(image),
+    numberOfColors
+  );
 
   for (let [r, g, b, a] of generatedColors) {
     const { name, hex } = colorName(`rgba(${r},${g},${b},${a / 255})`).ntc[0];
@@ -154,4 +165,84 @@ export const getColorSchemeFromImage = async (
   }
 
   return colors;
+};
+
+export const generateColorSchemeImage = async (
+  colors: Color[],
+  websiteTitle: string
+) => {
+  // Canvas setup
+  const canvasSize = {
+    width: 1980,
+    height: 500,
+  };
+  const canvasBgColor = "#FFF9EF";
+  const canvas = createCanvas(canvasSize.width, canvasSize.height);
+  const ctx = canvas.getContext("2d");
+  const fontSize = 24;
+  ctx.font = `${fontSize}px "Work Sans"`;
+  ctx.textAlign = "center";
+
+  // Fill background
+  ctx.fillStyle = canvasBgColor;
+  ctx.fillRect(0, 0, canvasSize.width, canvasSize.height);
+
+  // Position a rectangle of each color
+  const rectSize = 200;
+  const rectBorderWidth = 4;
+  const rectBorderColor = "#000000";
+  const halfOfRectSize = rectSize / 2;
+  const yRectOffset = 40;
+  const xRectPortionOfCanvas = Math.round(canvasSize.width / colors.length);
+  const yRect =
+    Math.round(canvasSize.height / 2 - halfOfRectSize) - yRectOffset;
+
+  for (let i = 0; i < colors.length; i++) {
+    const xDistanceMultiplier = i * xRectPortionOfCanvas;
+
+    const xRect =
+      Math.round(xRectPortionOfCanvas / 2 - halfOfRectSize) +
+      xDistanceMultiplier;
+
+    // Draw rect border
+    const rectBorderSize = rectSize + rectBorderWidth * 2;
+    ctx.fillStyle = rectBorderColor;
+    ctx.fillRect(
+      xRect - rectBorderWidth,
+      yRect - rectBorderWidth,
+      rectBorderSize,
+      rectBorderSize
+    );
+
+    // Draw rect
+    ctx.fillStyle = `#${colors[i].hex}`;
+    ctx.fillRect(xRect, yRect, rectSize, rectSize);
+
+    // Write color hex and name
+    ctx.fillStyle = rectBorderColor;
+    ctx.fillText(
+      `#${colors[i].hex}`,
+      xRect + rectSize / 2,
+      yRect + rectSize + yRectOffset
+    );
+    ctx.fillText(
+      colors[i].name,
+      xRect + rectSize / 2,
+      yRect + rectSize + yRectOffset + fontSize + 8
+    );
+  }
+
+  // Save color scheme image
+  const buffer = canvas.toBuffer("image/png");
+  const imagePath = path.join(
+    __dirname,
+    "..",
+    "assets",
+    "color-palettes",
+    `${titleToFileName(websiteTitle)}.png`
+  );
+
+  await fs.writeFile(imagePath, buffer);
+
+  return imagePath;
 };

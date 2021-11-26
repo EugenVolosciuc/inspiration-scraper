@@ -5,6 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "start": "ts-node app.ts",
+    "generate-article": "ts-node app.ts",
     "dev": "nodemon app.ts",
     "remove-websites": "ts-node ./standalone-scripts/remove-websites.ts",
     "remove-articles": "ts-node ./standalone-scripts/remove-articles.ts",
@@ -20,6 +21,7 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "canvas": "^2.8.0",
     "color-namer": "^1.4.0",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",

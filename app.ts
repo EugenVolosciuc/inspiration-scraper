@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
 import puppeteer from "puppeteer";
-import connect from "./db/connect";
+import { registerFont } from "canvas";
 
+import connect from "./db/connect";
 import inspirationSources from "./inspiration-sources/list";
 import { InspirationSourceName, WebsiteInfo } from "./types/InspirationSource";
 import { generateArticle } from "./utils/website";
@@ -9,6 +10,9 @@ import writeToConsole from "./utils/writeToConsole";
 
 const initiateApp = async () => {
   const startTime = dayjs();
+
+  registerFont("assets/fonts/WorkSans-Regular.ttf", { family: "Work Sans" });
+
   const connection = await connect();
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
