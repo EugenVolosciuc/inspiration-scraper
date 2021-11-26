@@ -15,6 +15,7 @@ require("dotenv").config();
 
 // file title, hexCodes[]
 /**
+ * Generate a color palette image by providing the desired hex colors
  * @example
  * // npm run generate-palette:hex -- --codes "#4EABD1" "#25272C" --title=Gemini
  */

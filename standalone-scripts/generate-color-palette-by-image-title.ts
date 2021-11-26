@@ -12,6 +12,7 @@ import writeToConsole from "../utils/writeToConsole";
 require("dotenv").config();
 
 /**
+ * Generate a color palette image from an image found in /assets/screenshots (.png only)
  * @example
  * // npm run generate-palette:image -- --title=Gemini --numberOfColors=3
  */
