@@ -25,9 +25,6 @@ const main = async () => {
     "codes"
   ).argv;
 
-  console.log("rest", rest);
-
-  console.log("codes", codes);
   if (!title) throw new Error("Please provide a title argument");
   if ((codes as string[])?.length < 1)
     throw new Error("Please provide an array of hex codes");
