@@ -8,7 +8,6 @@
     "generate-article": "ts-node app.ts",
     "generate-palette:image": "ts-node ./standalone-scripts/generate-color-palette-by-image-title.ts",
     "generate-palette:hex": "ts-node ./standalone-scripts/generate-color-palette-by-hex.ts",
-    "dev": "nodemon app.ts",
     "remove-websites": "ts-node ./standalone-scripts/remove-websites.ts",
     "remove-articles": "ts-node ./standalone-scripts/remove-articles.ts",
     "remove-all": "npm run remove-websites && npm run remove-articles"
@@ -19,7 +18,6 @@
     "@types/color-namer": "^1.3.0",
     "@types/fs-extra": "^9.0.13",
     "@types/yargs": "^17.0.7",
-    "nodemon": "^2.0.15",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.2"
   },
