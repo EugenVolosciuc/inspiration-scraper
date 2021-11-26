@@ -42,6 +42,7 @@ const handler: InspirationSource["handler"] = async (
     await page.goto(url);
 
     await scrollToBottomOfPage(page);
+    await page.waitForSelector(websiteTileSelector);
 
     const websitesTileInfo = await page.$$eval(
       websiteTileSelector,

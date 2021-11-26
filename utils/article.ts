@@ -38,9 +38,10 @@ export const getPartOfMonth = () => {
 
 export const createBlankArticle = async () => {
   const partOfMonth = getPartOfMonth();
+  const partContent = partOfMonth > 1 ? ` - Part ${partOfMonth}` : "";
   const fileTitle = `${articleTitleBase} ${dayjs().format(
     "MMMM YYYY"
-  )} - Part ${partOfMonth}`;
+  )}${partContent}`;
 
   const articlePath = path.join(
     articlesFolderPath,
