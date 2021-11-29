@@ -4,7 +4,10 @@ import inspirationSources from "../list";
 import errorHandler from "../../utils/errorHandler";
 import loopTimes from "../../utils/loopTimes";
 import writeToConsole from "../../utils/writeToConsole";
-import { normalizeWebsiteTitle } from "../../utils/string-manipulations";
+import {
+  getWebsiteDomain,
+  normalizeWebsiteTitle,
+} from "../../utils/string-manipulations";
 import {
   checkWebsiteInDB,
   processScrapedWebsiteInfo,
@@ -64,7 +67,7 @@ const handler: InspirationSource["handler"] = async (
 
       const scrapedWebsiteInfo: ScrapedWebsiteInfo = {
         title: normalizeWebsiteTitle(websiteTileInfo.title) as string,
-        url: websiteTileInfo.url,
+        url: getWebsiteDomain(websiteTileInfo.url),
         source: InspirationSourceName.BestWebsiteGallery,
       };
 

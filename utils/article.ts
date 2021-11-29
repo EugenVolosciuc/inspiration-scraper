@@ -60,21 +60,12 @@ export const generateContentTitle = (title: string) => {
 };
 
 export const generateBlogIntro = () => {
-  return (
-    loremIpsum({
-      count: 6, // Number of "words", "sentences", or "paragraphs"
-      format: "plain", // "plain" or "html"
-      paragraphLowerBound: 3, // Min. number of sentences per paragraph.
-      paragraphUpperBound: 7, // Max. number of sentences per paragarph.
-      sentenceLowerBound: 5, // Min. number of words per sentence.
-      sentenceUpperBound: 15, // Max. number of words per sentence.
-      units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
-    }) + "\n\n"
-  );
+  return "You're a web designer, web developer, or a little bit of both. You do what you love and you're even pretty good at it. Still, there are times when the creative juices are running low and a spark of inspiration is just the thing you need. Cue to the below list of selected design examples that might bring something new to your ideas.\n\n***\n\n";
 };
 
 export const generateContentSummary = (websites: ScrapedWebsiteInfo[]) => {
-  let summary = "";
+  let summary = "## Summary\n\n";
+
   for (let website of websites) {
     summary += `- [${website.title}](${website.url})\n`;
   }

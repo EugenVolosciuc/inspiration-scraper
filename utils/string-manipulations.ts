@@ -5,3 +5,6 @@ export const normalizeWebsiteTitle = (title: string | undefined) => {
 };
 
 export const titleToFileName = (title: string) => title.replace(/ /g, "_");
+
+export const getWebsiteDomain = (websiteURL: string) =>
+  websiteURL.split("?")[0];
