@@ -8,6 +8,8 @@ Scripts that _(kind of)_ automate the writing process for Web Design Inspiration
   - DB_URL - database to persist scraped website, to check if a website was already used
   - ARTICLES_PER_MONTH - changes the title of the article
   - COLORS_IN_PALETTE - number of colors in color palettes
+  - WAPPALYZER_API_KEY - Wappalyzer API key
+  - USE_PAYED_SERVICES - Whether or not to use payed services when generating an article
   - AWWWARDS_NUM_OF_ENTRIES
   - LAPA_NUM_OF_ENTRIES
   - BESTWEBSITEGALLERY_NUM_OF_ENTRIES

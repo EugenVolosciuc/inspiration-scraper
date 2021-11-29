@@ -12,6 +12,7 @@ import pixels from "image-pixels";
 import { ScrapedWebsiteInfo, WebsiteInfo } from "../types/InspirationSource";
 import { titleToFileName } from "./string-manipulations";
 import { Color } from "../types/Color";
+import { getWebsiteStack, stringifyStack } from "./website";
 
 const articleTitleBase = "Web Design Inspiration for";
 
@@ -111,7 +112,13 @@ export const generateWebsiteEntry = async (website: WebsiteInfo) => {
     units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
   });
 
-  return `${title}${screenshot}${colorPaletteImage}${entryDescription}\n\n`;
+  let stringifiedStack = "";
+  if (process.env.USE_PAYED_SERVICES) {
+    const stack = await getWebsiteStack(website.url);
+    if (!!stack) stringifiedStack = stringifyStack(stack);
+  }
+
+  return `${title}${screenshot}${colorPaletteImage}${stringifiedStack}\n\n${entryDescription}\n\n`;
 };
 
 export const generateWebsiteEntries = async (websites: WebsiteInfo[]) => {
