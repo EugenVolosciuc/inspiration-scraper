@@ -3,5 +3,13 @@ import lapa from "./lapa";
 import bestwebsitegallery from "./bestwebsitegallery";
 import webdesigninspiration from "./webdesigninspiration";
 import thefwa from "./thefwa";
+import siteinspire from "./siteinspire";
 
-export { awwwards, lapa, bestwebsitegallery, webdesigninspiration, thefwa };
+export {
+  awwwards,
+  lapa,
+  bestwebsitegallery,
+  webdesigninspiration,
+  thefwa,
+  siteinspire,
+};

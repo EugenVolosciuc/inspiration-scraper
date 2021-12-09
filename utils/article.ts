@@ -61,7 +61,7 @@ export const generateContentTitle = (title: string) => {
 };
 
 export const generateBlogIntro = () => {
-  return "You're a web designer, web developer, or a little bit of both. You do what you love and you're even pretty good at it. Still, there are times when the creative juices are running low and a spark of inspiration is just the thing you need. Cue to the below list of selected design examples that might bring something new to your ideas.\n\n***\n\n";
+  return "You’re a web designer, web developer, or a little bit of both. You do what you love and you’re even pretty good at it. Still, there are times when the creative juices are running low and a spark of inspiration is just the thing you need. Cue to the below list of selected design examples that might bring something new to your ideas.\n\n***\n\n";
 };
 
 export const generateContentSummary = (websites: ScrapedWebsiteInfo[]) => {
@@ -132,19 +132,7 @@ export const generateWebsiteEntries = async (websites: WebsiteInfo[]) => {
 };
 
 export const generateEndingContent = () => {
-  return (
-    "***\n\n" + // horizontal rule
-    loremIpsum({
-      count: 6, // Number of "words", "sentences", or "paragraphs"
-      format: "plain", // "plain" or "html"
-      paragraphLowerBound: 3, // Min. number of sentences per paragraph.
-      paragraphUpperBound: 7, // Max. number of sentences per paragarph.
-      sentenceLowerBound: 5, // Min. number of words per sentence.
-      sentenceUpperBound: 15, // Max. number of words per sentence.
-      units: "sentences", // paragraph(s), "sentence(s)", or "word(s)"
-    }) +
-    "\n\n"
-  );
+  return "Finding inspiration in a sea of information might feel daunting at first, but we hope we made this task a little easier. If you used any of the ideas mentioned above in your designs, please share in the comment section below, I would love to see your creations!";
 };
 
 export const getColorSchemeFromImage = async (
@@ -178,7 +166,7 @@ export const generateColorSchemeImage = async (
   const canvasBgColor = "#FFF9EF";
   const canvas = createCanvas(canvasSize.width, canvasSize.height);
   const ctx = canvas.getContext("2d");
-  const fontSize = 24;
+  const fontSize = 32;
   ctx.font = `${fontSize}px "Work Sans"`;
   ctx.textAlign = "center";
 
@@ -222,12 +210,12 @@ export const generateColorSchemeImage = async (
     ctx.fillText(
       `#${colors[i].hex}`,
       xRect + rectSize / 2,
-      yRect + rectSize + yRectOffset
+      yRect + rectSize + yRectOffset + 12
     );
     ctx.fillText(
       colors[i].name,
       xRect + rectSize / 2,
-      yRect + rectSize + yRectOffset + fontSize + 8
+      yRect + rectSize + yRectOffset + fontSize + 20
     );
   }
 

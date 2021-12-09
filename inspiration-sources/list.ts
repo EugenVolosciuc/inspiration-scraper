@@ -8,6 +8,7 @@ import {
   lapa,
   webdesigninspiration,
   thefwa,
+  siteinspire,
 } from "./scraping-handlers";
 
 require("dotenv").config();
@@ -53,6 +54,15 @@ const inspirationSources: {
     url: "https://thefwa.com/",
     handler: thefwa,
     numberOfEntries: parseInt(process.env.THEFWA_NUM_OF_ENTRIES as string, 10),
+  },
+  SiteInspire: {
+    title: "Site Inspire",
+    url: "https://www.siteinspire.com/",
+    handler: siteinspire,
+    numberOfEntries: parseInt(
+      process.env.SITEINSPIRE_NUM_OF_ENTRIES as string,
+      10
+    ),
   },
 };
 

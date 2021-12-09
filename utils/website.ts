@@ -39,8 +39,21 @@ const unnecessaryCategories = [
   "Email",
   "Operating systems",
   "Marketing automation",
+  "Documentation",
+  "Payment processors",
+  "Geolocation",
 ];
-const unnecessaryTechnologies = ["core-js", "Choices", "web-vitals", "HTTP/2"];
+const unnecessaryTechnologies = [
+  "core-js",
+  "Choices",
+  "web-vitals",
+  "HTTP/2",
+  "Cart Functionality",
+  "webpack",
+  "Lodash",
+  "parcel",
+  "Facebook",
+];
 
 export const takeHeroAreaScreenshot = async (page: Page, fileTitle: string) => {
   // TODO: create folder for article image
@@ -189,7 +202,8 @@ export const getWebsiteStack = async (url: string) => {
       {}
     );
 
-    writeToConsole(`Fetched website stack data of ${url}`, 1);
+    if (process.env.USE_PAYED_SERVICES)
+      writeToConsole(`Fetched website stack data of ${url}`, 1);
 
     return stack;
   } catch (error) {
@@ -201,7 +215,7 @@ export const getWebsiteStack = async (url: string) => {
 export const stringifyStack = (stack: WebsiteStack) => {
   const stringifiedStack = Object.entries(stack)
     .map(([category, technologies]) => {
-      let catStr = `**${category}**`;
+      let catStr = `**${category}**: `;
       const technologyStrings = [];
 
       for (let technology of technologies) {
@@ -214,5 +228,5 @@ export const stringifyStack = (stack: WebsiteStack) => {
     })
     .join("\n\n");
 
-  return "\n### Technologies:\n\n" + stringifiedStack;
+  return stringifiedStack;
 };
