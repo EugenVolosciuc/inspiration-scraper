@@ -16,6 +16,7 @@ Scripts that _(kind of)_ automate the writing process for Web Design Inspiration
   - WEBDESIGNINSPIRATION_NUM_OF_ENTRIES
   - THEFWA_NUM_OF_ENTRIES
   - SITEINSPIRE_NUM_OF_ENTRIES
+  - ONEPAGELOVE_NUM_OF_ENTRIES
 
 ## How to use:
 
