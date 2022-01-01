@@ -15,6 +15,7 @@ import { Color } from "../types/Color";
 import { getWebsiteStack, stringifyStack } from "./website";
 
 const articleTitleBase = "Web Design Inspiration for";
+const articlesPerMonth = parseInt(process.env.ARTICLES_PER_MONTH as string, 10);
 
 export const articleExtension = ".md";
 
@@ -26,10 +27,6 @@ export const articlesFolderPath = path.join(
 );
 
 export const getPartOfMonth = () => {
-  const articlesPerMonth = parseInt(
-    process.env.ARTICLES_PER_MONTH as string,
-    10
-  );
   const now = dayjs();
   const daysInMonth = now.daysInMonth();
   const currentDate = now.date();
@@ -39,7 +36,7 @@ export const getPartOfMonth = () => {
 
 export const createBlankArticle = async () => {
   const partOfMonth = getPartOfMonth();
-  const partContent = partOfMonth > 1 ? ` - Part ${partOfMonth}` : "";
+  const partContent = articlesPerMonth > 1 ? ` - Part ${partOfMonth}` : "";
   const fileTitle = `${articleTitleBase} ${dayjs().format(
     "MMMM YYYY"
   )}${partContent}`;
