@@ -4,6 +4,7 @@ import bestwebsitegallery from "./bestwebsitegallery";
 import webdesigninspiration from "./webdesigninspiration";
 import thefwa from "./thefwa";
 import siteinspire from "./siteinspire";
+import onepagelove from "./onepagelove";
 
 export {
   awwwards,
@@ -12,4 +13,5 @@ export {
   webdesigninspiration,
   thefwa,
   siteinspire,
+  onepagelove,
 };

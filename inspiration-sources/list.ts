@@ -9,6 +9,7 @@ import {
   webdesigninspiration,
   thefwa,
   siteinspire,
+  onepagelove,
 } from "./scraping-handlers";
 
 require("dotenv").config();
@@ -61,6 +62,15 @@ const inspirationSources: {
     handler: siteinspire,
     numberOfEntries: parseInt(
       process.env.SITEINSPIRE_NUM_OF_ENTRIES as string,
+      10
+    ),
+  },
+  OnePageLove: {
+    title: "OnePageLove",
+    url: "https://onepagelove.com/",
+    handler: onepagelove,
+    numberOfEntries: parseInt(
+      process.env.ONEPAGELOVE_NUM_OF_ENTRIES as string,
       10
     ),
   },

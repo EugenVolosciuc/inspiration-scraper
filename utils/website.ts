@@ -202,7 +202,7 @@ export const getWebsiteStack = async (url: string) => {
       {}
     );
 
-    if (process.env.USE_PAYED_SERVICES)
+    if (process.env.USE_PAYED_SERVICES === "true")
       writeToConsole(`Fetched website stack data of ${url}`, 1);
 
     return stack;

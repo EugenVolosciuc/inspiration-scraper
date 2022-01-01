@@ -113,7 +113,7 @@ export const generateWebsiteEntry = async (website: WebsiteInfo) => {
   });
 
   let stringifiedStack = "";
-  if (process.env.USE_PAYED_SERVICES) {
+  if (process.env.USE_PAYED_SERVICES === "true") {
     const stack = await getWebsiteStack(website.url);
     if (!!stack) stringifiedStack = stringifyStack(stack);
   }

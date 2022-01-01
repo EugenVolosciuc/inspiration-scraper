@@ -19,17 +19,17 @@ import {
   WebsiteInfo,
 } from "../../types/InspirationSource";
 
-const maxNumberOfEntries = 4;
+const maxNumberOfEntries = 6;
 
-/** This function fetches the information of "latest winners" websites from the bestwebsite.gallery homepage */
+/** This function fetches the information of "LATEST WEBSITE INSPIRATIONs" websites from the onepagelove.com homepage */
 const handler: InspirationSource["handler"] = async (
   page: Page,
   numberOfEntries: number = 1
 ) => {
-  const { url } = inspirationSources.BestWebsiteGallery;
+  const { url } = inspirationSources.OnePageLove;
 
   const getWebsiteTileSelector = (num: number) =>
-    `.c-section:not(.c-section--sotd) .c-sites .c-sites__item:nth-of-type(${num}) .c-sites__itemInner`;
+    `#container .archive-container.grid .grid-col .thumb-inspiration:nth-of-type(${num})`;
 
   try {
     if (numberOfEntries > maxNumberOfEntries) {
@@ -38,7 +38,7 @@ const handler: InspirationSource["handler"] = async (
       );
     }
 
-    writeToConsole(`Scraping from ${InspirationSourceName.BestWebsiteGallery}`);
+    writeToConsole(`Scraping from ${InspirationSourceName.OnePageLove}`);
 
     const websites: WebsiteInfo[] = [];
 
@@ -49,16 +49,13 @@ const handler: InspirationSource["handler"] = async (
 
       const websiteTileSelector = getWebsiteTileSelector(currentNumber);
 
-      // Hover over the image to get the website link
-      await page.hover(websiteTileSelector + " .c-sites__figureWrapper");
-
       const websiteTileInfo = await page.$eval(
         websiteTileSelector,
         (element) => ({
-          title: element.querySelector(".c-sites__title a")
+          title: element.querySelector(".thumb-info .thumb-name a")
             ?.textContent as string,
           url: element
-            .querySelector(".c-quickLinks > a:nth-of-type(2)")
+            .querySelector(".thumb-info .thumb-title .thumb-link a")
             ?.getAttribute("href") as string,
         })
       );
@@ -66,7 +63,7 @@ const handler: InspirationSource["handler"] = async (
       const scrapedWebsiteInfo: ScrapedWebsiteInfo = {
         title: normalizeWebsiteTitle(websiteTileInfo.title) as string,
         url: getWebsiteDomain(websiteTileInfo.url),
-        source: InspirationSourceName.BestWebsiteGallery,
+        source: InspirationSourceName.OnePageLove,
       };
 
       const websiteExistsInDB = await checkWebsiteInDB(scrapedWebsiteInfo);
@@ -93,7 +90,7 @@ const handler: InspirationSource["handler"] = async (
 
     return websites;
   } catch (error) {
-    errorHandler(error, InspirationSourceName.BestWebsiteGallery);
+    errorHandler(error, InspirationSourceName.OnePageLove);
 
     return [];
   }
