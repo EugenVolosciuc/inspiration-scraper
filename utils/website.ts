@@ -42,6 +42,8 @@ const unnecessaryCategories = [
   "Documentation",
   "Payment processors",
   "Geolocation",
+  "Authentication",
+  "Video players",
 ];
 const unnecessaryTechnologies = [
   "core-js",
@@ -53,6 +55,9 @@ const unnecessaryTechnologies = [
   "Lodash",
   "parcel",
   "Facebook",
+  "Underscore.js",
+  "Modernizr",
+  "jQuery UI",
 ];
 
 export const takeHeroAreaScreenshot = async (page: Page, fileTitle: string) => {
