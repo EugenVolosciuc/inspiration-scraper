@@ -5,7 +5,11 @@ type SourceOptions = {
   websiteIndexes: Array<number> | null;
 };
 
-const options: Record<InspirationSourceName, SourceOptions> = {
+export const colorsInPalette = 5;
+
+export const articlesPerMonth = 2;
+
+export const sourceOptions: Record<InspirationSourceName, SourceOptions> = {
   Awwwards: {
     numOfEntries: 1,
     websiteIndexes: null,
@@ -35,5 +39,3 @@ const options: Record<InspirationSourceName, SourceOptions> = {
     websiteIndexes: null,
   },
 };
-
-export default options;

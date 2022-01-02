@@ -13,9 +13,9 @@ import { ScrapedWebsiteInfo, WebsiteInfo } from "../types/InspirationSource";
 import { titleToFileName } from "./string-manipulations";
 import { Color } from "../types/Color";
 import { getWebsiteStack, stringifyStack } from "./website";
+import { articlesPerMonth } from "../inspiration-sources/options";
 
 const articleTitleBase = "Web Design Inspiration for";
-const articlesPerMonth = parseInt(process.env.ARTICLES_PER_MONTH as string, 10);
 
 export const articleExtension = ".md";
 

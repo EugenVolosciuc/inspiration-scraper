@@ -7,6 +7,7 @@ import {
   getColorSchemeFromImage,
   generateColorSchemeImage,
 } from "../utils/article";
+import { colorsInPalette } from "../inspiration-sources/options";
 import writeToConsole from "../utils/writeToConsole";
 
 require("dotenv").config();
@@ -27,8 +28,7 @@ const main = async () => {
 
     const colors = await getColorSchemeFromImage(
       screenshot,
-      (numberOfColors as number) ||
-        parseInt(process.env.COLORS_IN_PALETTE as string, 10)
+      (numberOfColors as number) || colorsInPalette
     );
 
     await generateColorSchemeImage(colors, title as string);

@@ -7,7 +7,7 @@ import inspirationSources from "./inspiration-sources/list";
 import { InspirationSourceName, WebsiteInfo } from "./types/InspirationSource";
 import { generateArticle } from "./utils/website";
 import writeToConsole from "./utils/writeToConsole";
-import options from "./inspiration-sources/options";
+import { sourceOptions } from "./inspiration-sources/options";
 
 const initiateApp = async () => {
   const startTime = dayjs();
@@ -29,7 +29,8 @@ const initiateApp = async () => {
     const scrapedEntries = await inspirationSource.handler(
       page,
       inspirationSource.numberOfEntries,
-      options[inspirationSourceTitle as InspirationSourceName].websiteIndexes
+      sourceOptions[inspirationSourceTitle as InspirationSourceName]
+        .websiteIndexes
     );
 
     websites = websites.concat(scrapedEntries);
