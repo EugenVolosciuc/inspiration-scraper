@@ -103,11 +103,11 @@ const handler: ScrapingHandler = async (
 
     if (usingManualSelection) {
       for (let i = 0; i < websiteIndexes?.length; i++) {
-        scrapeWebsite(websiteIndexes[i] - 1);
+        await scrapeWebsite(websiteIndexes[i] - 1);
       }
     } else {
       for (let i = 0; i < numberOfEntries; i++) {
-        scrapeWebsite(i);
+        await scrapeWebsite(i);
       }
     }
 

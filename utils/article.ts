@@ -14,6 +14,8 @@ import { titleToFileName } from "./string-manipulations";
 import { Color } from "../types/Color";
 import { getWebsiteStack, stringifyStack } from "./website";
 import { articlesPerMonth } from "../inspiration-sources/options";
+import { usePayedServices } from "../inspiration-sources/options";
+import writeToConsole from "./writeToConsole";
 
 const articleTitleBase = "Web Design Inspiration for";
 
@@ -110,7 +112,7 @@ export const generateWebsiteEntry = async (website: WebsiteInfo) => {
   });
 
   let stringifiedStack = "";
-  if (process.env.USE_PAYED_SERVICES === "true") {
+  if (usePayedServices) {
     const stack = await getWebsiteStack(website.url);
     if (!!stack) stringifiedStack = stringifyStack(stack);
   }
@@ -124,6 +126,8 @@ export const generateWebsiteEntries = async (websites: WebsiteInfo[]) => {
   for (let website of websites) {
     content += await generateWebsiteEntry(website);
   }
+
+  if (!usePayedServices) writeToConsole("Skipped getting website stacks", 1);
 
   return content;
 };

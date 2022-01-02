@@ -88,12 +88,12 @@ const handler: ScrapingHandler = async (
 
     if (usingManualSelection) {
       for (let i = 0; i < websiteIndexes?.length; i++) {
-        scrapeWebsite(websiteIndexes[i]);
+        await scrapeWebsite(websiteIndexes[i]);
       }
     } else {
       // Go through each website `numberOfEntries` times
       await loopTimes(numberOfEntries, async (currentNumber) => {
-        scrapeWebsite(currentNumber);
+        await scrapeWebsite(currentNumber);
       });
     }
 

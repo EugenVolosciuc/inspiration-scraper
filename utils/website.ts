@@ -21,6 +21,10 @@ import {
 } from "./article";
 import { titleToFileName } from "./string-manipulations";
 import { WappalyzerResponse, WebsiteStack } from "../types/WebsiteStack";
+import {
+  usePayedServices,
+  colorsInPalette,
+} from "../inspiration-sources/options";
 
 const unnecessaryCategories = [
   "SEO",
@@ -105,10 +109,7 @@ export const processScrapedWebsiteInfo = async (
     page,
     scrapedWebsiteInfo.title
   );
-  const colors = await getColorSchemeFromImage(
-    screenshot,
-    parseInt(process.env.COLORS_IN_PALETTE as string, 10)
-  );
+  const colors = await getColorSchemeFromImage(screenshot, colorsInPalette);
 
   return {
     ...scrapedWebsiteInfo,
@@ -207,7 +208,7 @@ export const getWebsiteStack = async (url: string) => {
       {}
     );
 
-    if (process.env.USE_PAYED_SERVICES === "true")
+    if (usePayedServices)
       writeToConsole(`Fetched website stack data of ${url}`, 1);
 
     return stack;

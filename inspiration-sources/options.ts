@@ -9,6 +9,8 @@ export const colorsInPalette = 5;
 
 export const articlesPerMonth = 2;
 
+export const usePayedServices = false;
+
 export const sourceOptions: Record<InspirationSourceName, SourceOptions> = {
   Awwwards: {
     numOfEntries: 1,
