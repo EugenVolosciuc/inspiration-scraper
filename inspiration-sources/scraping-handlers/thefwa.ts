@@ -12,7 +12,6 @@ import {
   scrollToBottomOfPage,
 } from "../../utils/website";
 import {
-  InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
   ScrapingHandler,
@@ -43,7 +42,11 @@ const handler: ScrapingHandler = async (
       );
     }
 
-    writeToConsole(`Scraping from ${InspirationSourceName.TheFWA}`);
+    writeToConsole(
+      `Scraping from ${InspirationSourceName.TheFWA}${
+        usingManualSelection ? " using manual indexes" : ""
+      }`
+    );
 
     const websites: WebsiteInfo[] = [];
 

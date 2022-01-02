@@ -10,7 +10,6 @@ import {
   processScrapedWebsiteInfo,
 } from "../../utils/website";
 import {
-  InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
   ScrapingHandler,
@@ -42,7 +41,11 @@ const handler: ScrapingHandler = async (
       );
     }
 
-    writeToConsole(`Scraping from ${InspirationSourceName.SiteInspire}`);
+    writeToConsole(
+      `Scraping from ${InspirationSourceName.SiteInspire}${
+        usingManualSelection ? " using manual indexes" : ""
+      }`
+    );
 
     const websitesInfo = await page.$$eval(websiteTileSelector, (elements) => {
       const websitesInfo = [];

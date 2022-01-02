@@ -11,7 +11,6 @@ import {
   processScrapedWebsiteInfo,
 } from "../../utils/website";
 import {
-  InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
   ScrapingHandler,
@@ -43,7 +42,11 @@ const handler: ScrapingHandler = async (
       );
     }
 
-    writeToConsole(`Scraping from ${InspirationSourceName.OnePageLove}`);
+    writeToConsole(
+      `Scraping from ${InspirationSourceName.OnePageLove}${
+        usingManualSelection ? " using manual indexes" : ""
+      }`
+    );
 
     const websites: WebsiteInfo[] = [];
 

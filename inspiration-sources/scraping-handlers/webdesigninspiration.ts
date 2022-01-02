@@ -11,7 +11,6 @@ import {
   processScrapedWebsiteInfo,
 } from "../../utils/website";
 import {
-  InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
   ScrapingHandler,
@@ -44,7 +43,9 @@ const handler: ScrapingHandler = async (
     }
 
     writeToConsole(
-      `Scraping from ${InspirationSourceName.WebDesignInspiration}`
+      `Scraping from ${InspirationSourceName.WebDesignInspiration}${
+        usingManualSelection ? " using manual indexes" : ""
+      }`
     );
 
     const websites: WebsiteInfo[] = [];
