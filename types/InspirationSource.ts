@@ -29,7 +29,13 @@ export interface WebsiteInfo extends ScrapedWebsiteInfo {
   colors: Color[];
 }
 
+export type ScrapingHandler = (
+  page: Page,
+  numberOfEntries?: number,
+  websiteIndexes?: Array<number>
+) => Promise<WebsiteInfo[]>;
+
 export interface InspirationSource extends WebsiteInfoBase {
-  handler: (page: Page, numberOfEntries?: number) => Promise<WebsiteInfo[]>;
+  handler: ScrapingHandler;
   numberOfEntries?: number;
 }

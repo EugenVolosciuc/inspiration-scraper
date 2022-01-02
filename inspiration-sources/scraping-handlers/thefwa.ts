@@ -1,5 +1,3 @@
-import { Page } from "puppeteer";
-
 import inspirationSources from "../list";
 import errorHandler from "../../utils/errorHandler";
 import loopTimes from "../../utils/loopTimes";
@@ -17,22 +15,29 @@ import {
   InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
+  ScrapingHandler,
   WebsiteInfo,
 } from "../../types/InspirationSource";
 
 const maxNumberOfEntries = 15;
 
-const handler: InspirationSource["handler"] = async (
-  page: Page,
-  numberOfEntries: number = 1
+const handler: ScrapingHandler = async (
+  page,
+  numberOfEntries = 1,
+  websiteIndexes
 ) => {
+  const usingManualSelection = !!websiteIndexes?.length;
+  const tooManyEntriesRequested = usingManualSelection
+    ? websiteIndexes.length > maxNumberOfEntries
+    : numberOfEntries > maxNumberOfEntries;
+
   const { url } = inspirationSources.TheFWA;
 
   const websiteTileSelector =
     ".timeline .timeline__element:not(.same) .timeline-case .timeline-case__details__title a";
 
   try {
-    if (numberOfEntries > maxNumberOfEntries) {
+    if (tooManyEntriesRequested) {
       throw new Error(
         `Can't fetch more than ${maxNumberOfEntries} websites from ${InspirationSourceName.TheFWA}`
       );
@@ -63,10 +68,9 @@ const handler: InspirationSource["handler"] = async (
       }
     );
 
-    // Go through each website `numberOfEntries` times
-    await loopTimes(numberOfEntries, async (currentNumber) => {
+    const scrapeWebsite = async (websiteIndex: number) => {
       await page.goto(url);
-      const websiteTileInfo = websitesTileInfo[currentNumber];
+      const websiteTileInfo = websitesTileInfo[websiteIndex];
 
       // Go to the selected website's The FWA page
       await page.goto(`${page.url().slice(0, -1)}${websiteTileInfo.innerURL}`);
@@ -100,7 +104,18 @@ const handler: InspirationSource["handler"] = async (
         scrapedWebsiteInfo
       );
       websites.push(websiteInfo);
-    });
+    };
+
+    if (usingManualSelection) {
+      for (let i = 0; i < websiteIndexes?.length; i++) {
+        scrapeWebsite(websiteIndexes[i]);
+      }
+    } else {
+      // Go through each website `numberOfEntries` times
+      await loopTimes(numberOfEntries, async (currentNumber) => {
+        scrapeWebsite(currentNumber);
+      });
+    }
 
     writeToConsole(`Finished scraping from ${InspirationSourceName.TheFWA}`, 1);
 

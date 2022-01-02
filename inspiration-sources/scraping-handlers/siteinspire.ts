@@ -1,5 +1,3 @@
-import { Page } from "puppeteer";
-
 import inspirationSources from "../list";
 import errorHandler from "../../utils/errorHandler";
 import writeToConsole from "../../utils/writeToConsole";
@@ -15,23 +13,30 @@ import {
   InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
+  ScrapingHandler,
   WebsiteInfo,
 } from "../../types/InspirationSource";
 
 const maxNumberOfEntries = 12;
 
 /** This function fetches the information of websites from the siteinspire.com homepage */
-const handler: InspirationSource["handler"] = async (
-  page: Page,
-  numberOfEntries: number = 1
+const handler: ScrapingHandler = async (
+  page,
+  numberOfEntries = 1,
+  websiteIndexes
 ) => {
+  const usingManualSelection = !!websiteIndexes?.length;
+  const tooManyEntriesRequested = usingManualSelection
+    ? websiteIndexes.length > maxNumberOfEntries
+    : numberOfEntries > maxNumberOfEntries;
+
   const { url } = inspirationSources.SiteInspire;
   await page.goto(url);
 
   const websiteTileSelector = "#main #grid .thumbnail";
 
   try {
-    if (numberOfEntries > maxNumberOfEntries) {
+    if (tooManyEntriesRequested) {
       throw new Error(
         `Can't fetch more than ${maxNumberOfEntries} websites from ${InspirationSourceName.Awwwards}`
       );
@@ -40,7 +45,6 @@ const handler: InspirationSource["handler"] = async (
     writeToConsole(`Scraping from ${InspirationSourceName.SiteInspire}`);
 
     const websitesInfo = await page.$$eval(websiteTileSelector, (elements) => {
-      console.log("elements", elements);
       const websitesInfo = [];
 
       for (let i = 0; i < elements.length; i++) {
@@ -61,8 +65,10 @@ const handler: InspirationSource["handler"] = async (
 
     const websites: WebsiteInfo[] = [];
 
-    for (let i = 0; i < numberOfEntries; i++) {
-      await page.goto(`${url.slice(0, -1)}${websitesInfo[i].innerURL}`);
+    const scrapeWebsite = async (websiteIndex: number) => {
+      await page.goto(
+        `${url.slice(0, -1)}${websitesInfo[websiteIndex].innerURL}`
+      );
 
       const websiteURL = await page.$eval(
         "#website .visit",
@@ -70,7 +76,9 @@ const handler: InspirationSource["handler"] = async (
       );
 
       const scrapedWebsiteInfo: ScrapedWebsiteInfo = {
-        title: normalizeWebsiteTitle(websitesInfo[i].title) as string,
+        title: normalizeWebsiteTitle(
+          websitesInfo[websiteIndex].title
+        ) as string,
         url: getWebsiteDomain(websiteURL),
         source: InspirationSourceName.SiteInspire,
       };
@@ -81,15 +89,23 @@ const handler: InspirationSource["handler"] = async (
           `"${scrapedWebsiteInfo.title}" website is already in DB`,
           1
         );
-
-        continue;
+      } else {
+        const websiteInfo = await processScrapedWebsiteInfo(
+          page,
+          scrapedWebsiteInfo
+        );
+        websites.push(websiteInfo);
       }
+    };
 
-      const websiteInfo = await processScrapedWebsiteInfo(
-        page,
-        scrapedWebsiteInfo
-      );
-      websites.push(websiteInfo);
+    if (usingManualSelection) {
+      for (let i = 0; i < websiteIndexes?.length; i++) {
+        scrapeWebsite(websiteIndexes[i] - 1);
+      }
+    } else {
+      for (let i = 0; i < numberOfEntries; i++) {
+        scrapeWebsite(i);
+      }
     }
 
     writeToConsole(

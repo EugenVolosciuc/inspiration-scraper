@@ -1,5 +1,3 @@
-import { Page } from "puppeteer";
-
 import inspirationSources from "../list";
 import errorHandler from "../../utils/errorHandler";
 import loopTimes from "../../utils/loopTimes";
@@ -16,23 +14,30 @@ import {
   InspirationSource,
   InspirationSourceName,
   ScrapedWebsiteInfo,
+  ScrapingHandler,
   WebsiteInfo,
 } from "../../types/InspirationSource";
 
 const maxNumberOfEntries = 2;
 
 /** This function fetches the information of websites from the lapa.ninja homepage */
-const handler: InspirationSource["handler"] = async (
-  page: Page,
-  numberOfEntries: number = 1
+const handler: ScrapingHandler = async (
+  page,
+  numberOfEntries = 1,
+  websiteIndexes
 ) => {
+  const usingManualSelection = !!websiteIndexes?.length;
+  const tooManyEntriesRequested = usingManualSelection
+    ? websiteIndexes.length > maxNumberOfEntries
+    : numberOfEntries > maxNumberOfEntries;
+
   const { url } = inspirationSources.Lapa;
 
   const getWebsiteTileSelector = (num: number) =>
     `.body .container .columns .column:nth-of-type(${num})`;
 
   try {
-    if (numberOfEntries > maxNumberOfEntries) {
+    if (tooManyEntriesRequested) {
       throw new Error(
         `Can't fetch more than ${maxNumberOfEntries} websites from ${InspirationSourceName.Lapa}`
       );
@@ -42,13 +47,12 @@ const handler: InspirationSource["handler"] = async (
 
     const websites: WebsiteInfo[] = [];
 
-    // Go through each website `numberOfEntries` times
-    await loopTimes(numberOfEntries, async (currentNumber) => {
+    const scrapeWebsite = async (websiteIndex: number) => {
       // Go to lapa home page after every entry
       await page.goto(url);
 
       const websiteTileInfo = await page.$eval(
-        getWebsiteTileSelector(currentNumber),
+        getWebsiteTileSelector(websiteIndex),
         (element) => ({
           title: element.querySelector(".card-header .card-title a")
             ?.textContent as string,
@@ -79,7 +83,18 @@ const handler: InspirationSource["handler"] = async (
         scrapedWebsiteInfo
       );
       websites.push(websiteInfo);
-    });
+    };
+
+    if (usingManualSelection) {
+      for (let i = 0; i < websiteIndexes?.length; i++) {
+        scrapeWebsite(websiteIndexes[i]);
+      }
+    } else {
+      // Go through each website `numberOfEntries` times
+      await loopTimes(numberOfEntries, async (currentNumber) => {
+        scrapeWebsite(currentNumber);
+      });
+    }
 
     writeToConsole(`Finished scraping from ${InspirationSourceName.Lapa}`, 1);
 
