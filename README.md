@@ -7,7 +7,6 @@ Scripts that _(kind of)_ automate the writing process for Web Design Inspiration
 - Make sure you have the following keys in your .env file:
   - DB_URL - database to persist scraped website, to check if a website was already used
   - WAPPALYZER_API_KEY - Wappalyzer API key
-  - USE_PAYED_SERVICES - Whether or not to use payed services when generating an article
 
 ## How to use:
 
