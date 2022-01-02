@@ -15,7 +15,7 @@ const main = async () => {
   await fs.emptyDir("assets/screenshots");
   writeToConsole("Removed all screenshots from assets/screenshots folder");
 
-  // Remove screenshots from assets folder
+  // Remove color palettes from assets folder
   await fs.emptyDir("assets/color-palettes");
   writeToConsole(
     "Removed all color palettes from assets/color-palettes folder"
