@@ -32,7 +32,7 @@ export interface WebsiteInfo extends ScrapedWebsiteInfo {
 export type ScrapingHandler = (
   page: Page,
   numberOfEntries?: number,
-  websiteIndexes?: Array<number>
+  websiteIndexes?: Array<number> | null
 ) => Promise<WebsiteInfo[]>;
 
 export interface InspirationSource extends WebsiteInfoBase {
